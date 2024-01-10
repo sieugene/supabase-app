@@ -1,4 +1,5 @@
 import { Session } from "@supabase/supabase-js";
+import { Avatar } from "entities/avatar/ui";
 import { FC, useEffect, useState } from "react";
 import { SUPABASE_CLIENT } from "shared/api/supabase";
 
@@ -43,7 +44,7 @@ export const Account: FC<Props> = ({ session }) => {
   }, [session]);
 
   async function updateProfile(
-    event: React.FormEvent<HTMLFormElement>,
+    event: React.FormEvent<HTMLFormElement | HTMLInputElement>,
     avatarUrl: string
   ) {
     event.preventDefault();
@@ -76,6 +77,13 @@ export const Account: FC<Props> = ({ session }) => {
       }}
       className="form-widget"
     >
+      <Avatar
+        url={avatar_url}
+        size={150}
+        onUpload={(event, url) => {
+          updateProfile(event, url);
+        }}
+      />
       <div className="field">
         <label htmlFor="email">Email</label>
         <input id="email" type="text" value={session.user.email} disabled />
