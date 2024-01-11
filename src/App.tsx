@@ -1,21 +1,25 @@
 import { Account } from "entities/account/ui";
-import Auth from "features/auth/ui/Auth";
-import { useSession } from "shared/hooks/useSession";
+import { PrivatePage } from "features/auth/ui";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { SessionProvider } from "shared/providers";
 import "./App.css";
 
-function App() {
-  const session = useSession();
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Account />,
+  },
+]);
 
+function App() {
   return (
-    <>
+    <SessionProvider>
       <div className="container" style={{ padding: "50px 0 100px 0" }}>
-        {!session ? (
-          <Auth />
-        ) : (
-          <Account key={session.user.id} session={session} />
-        )}
+        <PrivatePage>
+          <RouterProvider router={router} />
+        </PrivatePage>
       </div>
-    </>
+    </SessionProvider>
   );
 }
 

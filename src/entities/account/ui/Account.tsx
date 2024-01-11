@@ -1,13 +1,11 @@
-import { Session } from "@supabase/supabase-js";
 import { Avatar } from "entities/avatar/ui";
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { SUPABASE_CLIENT } from "shared/api/supabase";
+import { useSessionContext } from "shared/providers";
 import { GetProfileQuery, getProfileQuery } from "../api";
 
-type Props = {
-  session: Session;
-};
-export const Account: FC<Props> = ({ session }) => {
+export const Account = () => {
+  const { user } = useSessionContext();
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState<GetProfileQuery["username"]>("");
   const [website, setWebsite] = useState<GetProfileQuery["website"]>("");
@@ -17,8 +15,9 @@ export const Account: FC<Props> = ({ session }) => {
   useEffect(() => {
     let ignore = false;
     async function getProfile() {
+      if (!user) return;
       setLoading(true);
-      const { user } = session;
+
       const { data, error } = await getProfileQuery(user);
 
       if (!ignore) {
@@ -39,16 +38,17 @@ export const Account: FC<Props> = ({ session }) => {
     return () => {
       ignore = true;
     };
-  }, [session]);
+  }, [user]);
 
   async function updateProfile(
     event: React.FormEvent<HTMLFormElement | HTMLInputElement>,
     avatarUrl: string
   ) {
+    if (!user) return;
+
     event.preventDefault();
 
     setLoading(true);
-    const { user } = session;
 
     const updates = {
       id: user.id,
@@ -84,7 +84,7 @@ export const Account: FC<Props> = ({ session }) => {
       />
       <div className="field">
         <label htmlFor="email">Email</label>
-        <input id="email" type="text" value={session.user.email} disabled />
+        <input id="email" type="text" value={user?.email} disabled />
       </div>
       <div className="field">
         <label htmlFor="username">Name</label>
