@@ -69,62 +69,56 @@ export const Account = () => {
   }
 
   return (
-    <form
-      onSubmit={(event) => {
-        updateProfile(event, "");
-      }}
-      className="form-widget"
-    >
-      <Avatar
-        url={avatar_url || ""}
-        size={150}
-        onUpload={(event, url) => {
-          updateProfile(event, url);
+    <>
+      <form
+        onSubmit={(event) => {
+          updateProfile(event, "");
         }}
-      />
-      <div className="field">
-        <label htmlFor="email">Email</label>
-        <input id="email" type="text" value={user?.email} disabled />
-      </div>
-      <div className="field">
-        <label htmlFor="username">Name</label>
-        <input
-          id="username"
-          type="text"
-          required
-          value={username || ""}
-          onChange={(e) => setUsername(e.target.value)}
+        className="form-widget"
+      >
+        <Avatar
+          url={avatar_url || ""}
+          size={150}
+          onUpload={(event, url) => {
+            updateProfile(event, url);
+          }}
         />
-      </div>
-      <div className="field">
-        <label htmlFor="website">Website</label>
-        <input
-          id="website"
-          type="url"
-          value={website || ""}
-          onChange={(e) => setWebsite(e.target.value)}
-        />
-      </div>
+        <div className="field">
+          <label htmlFor="email">Email</label>
+          <input id="email" type="text" value={user?.email} disabled />
+        </div>
+        <div className="field">
+          <label htmlFor="username">Name</label>
+          <input
+            id="username"
+            type="text"
+            required
+            value={username || ""}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        <div className="field">
+          <label htmlFor="website">Website</label>
+          <input
+            id="website"
+            type="url"
+            value={website || ""}
+            onChange={(e) => setWebsite(e.target.value)}
+          />
+        </div>
 
-      <div>
-        <button
-          className="button block primary"
-          type="submit"
-          disabled={loading}
-        >
-          {loading ? "Loading ..." : "Update"}
-        </button>
-      </div>
+        <br />
 
-      <div>
-        <button
-          className="button block"
-          type="button"
-          onClick={() => SUPABASE_CLIENT.auth.signOut()}
-        >
-          Sign Out
-        </button>
-      </div>
-    </form>
+        <div>
+          <button
+            className="button block primary"
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? "Loading ..." : "Update"}
+          </button>
+        </div>
+      </form>
+    </>
   );
 };

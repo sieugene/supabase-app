@@ -1,4 +1,8 @@
 #root {
+  width: 100%;
+  min-height: 100vh;
+}
+.container {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -28,8 +32,37 @@ input {
   display: flex;
   align-items: center;
   gap: 10px;
+  justify-content: center;
 }
 
 .field label {
   width: 100px;
 }
+
+/* header styles */
+.header {
+}
+.header nav {
+  display: flex;
+  justify-content: space-between;
+}
+.header .actions {
+  width: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.header ul {
+  list-style: none;
+  display: flex;
+  gap: 5px;
+  width: 100%;
+}
+.header a {
+  color: #7076de;
+}
+.header a.active {
+  color: #454dda;
+  font-weight: 800;
+}
+/* header styles end */
