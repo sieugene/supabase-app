@@ -2,26 +2,24 @@ import { Session } from "@supabase/supabase-js";
 import { Avatar } from "entities/avatar/ui";
 import { FC, useEffect, useState } from "react";
 import { SUPABASE_CLIENT } from "shared/api/supabase";
+import { GetProfileQuery, getProfileQuery } from "../api";
 
 type Props = {
   session: Session;
 };
 export const Account: FC<Props> = ({ session }) => {
   const [loading, setLoading] = useState(true);
-  const [username, setUsername] = useState("");
-  const [website, setWebsite] = useState("");
-  const [avatar_url, setAvatarUrl] = useState("");
+  const [username, setUsername] = useState<GetProfileQuery["username"]>("");
+  const [website, setWebsite] = useState<GetProfileQuery["website"]>("");
+  const [avatar_url, setAvatarUrl] =
+    useState<GetProfileQuery["avatar_url"]>("");
 
   useEffect(() => {
     let ignore = false;
     async function getProfile() {
       setLoading(true);
       const { user } = session;
-
-      const { data, error } = await SUPABASE_CLIENT.from("profiles")
-        .select(`username, website, avatar_url`)
-        .eq("id", user.id)
-        .single();
+      const { data, error } = await getProfileQuery(user);
 
       if (!ignore) {
         if (error) {
@@ -57,7 +55,7 @@ export const Account: FC<Props> = ({ session }) => {
       username,
       website,
       avatar_url,
-      updated_at: new Date(),
+      updated_at: new Date().toString(),
     };
 
     const { error } = await SUPABASE_CLIENT.from("profiles").upsert(updates);
@@ -78,7 +76,7 @@ export const Account: FC<Props> = ({ session }) => {
       className="form-widget"
     >
       <Avatar
-        url={avatar_url}
+        url={avatar_url || ""}
         size={150}
         onUpload={(event, url) => {
           updateProfile(event, url);
