@@ -34,8 +34,9 @@ export const useCourses = () => {
     const data: CoursesData =
       allCourses?.map((course) => {
         const isJoined = studentCourses?.find(
-          (studentCourse) => studentCourse.id === course.id
+          (studentCourse) => studentCourse.courses?.id === course.id
         );
+
         return {
           ...course,
           joined: !!isJoined,
@@ -43,6 +44,7 @@ export const useCourses = () => {
       }) || [];
     return data;
   }, [allCourses, studentCourses]);
+
   return {
     coursesData,
     allCourses,
@@ -58,9 +60,9 @@ const useStudentCourses = () => {
     if (!student) return null;
 
     const { data: courseStudents, error } = await SUPABASE_CLIENT.from(
-      "courseStudents"
+      "student_courses"
     )
-      .select(`id, courses ( * ), students ( * ) `)
+      .select(`courses ( * ), students ( * ) `)
       .eq("student_id", student.id);
 
     if (error) {

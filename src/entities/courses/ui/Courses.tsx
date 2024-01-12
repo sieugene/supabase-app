@@ -24,15 +24,16 @@ export const Courses = () => {
                   <b>{course?.title}</b>
                   <p>Date: {new Date(course?.created_at).toUTCString()}</p>
                 </div>
-                {course.joined ? (
-                  <h4>enrolled</h4>
-                ) : (
-                  <div className={classes.cardBottom}>
+
+                <div className={classes.cardBottom}>
+                  {course.joined ? (
+                    <h4>enrolled</h4>
+                  ) : (
                     <button onClick={() => joinInCourse(course?.id)}>
                       Join
                     </button>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             );
           })}

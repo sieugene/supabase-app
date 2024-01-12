@@ -7,12 +7,13 @@ export const useJoinInCourse = () => {
   const { data: student } = useStudent();
 
   const joinInCourse = useCallback(
-    async (courseId: Tables<"courseStudents">["course_id"]) => {
-      await SUPABASE_CLIENT.from("courseStudents")
-        .insert([{ student_id: student?.id, course_id: courseId }])
+    async (courseId: Tables<"student_courses">["course_id"]) => {
+      if (!student) return;
+      await SUPABASE_CLIENT.from("student_courses")
+        .insert([{ course_id: courseId, student_id: student?.id }])
         .select();
     },
-    [student?.id]
+    [student]
   );
   return joinInCourse;
 };
