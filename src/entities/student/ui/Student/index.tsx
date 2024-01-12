@@ -4,13 +4,14 @@ import { useSessionContext } from "shared/providers";
 
 export const Student = () => {
   const { user } = useSessionContext();
-  const { data, isLoading } = useStudent();
+  const { data, isLoading, mutate } = useStudent();
 
   const joinAsStudent = async () => {
     if (!user) return;
     await SUPABASE_CLIENT.from("students")
       .insert([{ userId: user?.id }])
       .select();
+    await mutate(null);
   };
 
   if (isLoading) {

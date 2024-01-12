@@ -37,7 +37,7 @@ export const Courses = () => {
 
       <h2>Joined courses</h2>
       <div className={classes.list}>
-        {studentCourses?.length &&
+        {studentCourses?.length ? (
           studentCourses?.map(
             ({ courses }) =>
               courses && (
@@ -49,7 +49,12 @@ export const Courses = () => {
                   key={courses?.id}
                 />
               )
-          )}
+          )
+        ) : (
+          <h2 style={{ width: "100%" }}>
+            You haven't joined any of the courses yet.
+          </h2>
+        )}
       </div>
     </>
   );
