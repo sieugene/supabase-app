@@ -3,7 +3,7 @@ import { useStudent } from "entities/student/hooks/useStudent";
 import { useCallback } from "react";
 import { SUPABASE_CLIENT } from "shared/api/supabase";
 
-export const useJoinInCourse = () => {
+export const useJoinInCourse = (refetchCourses: () => Promise<void>) => {
   const { data: student } = useStudent();
 
   const joinInCourse = useCallback(
@@ -12,8 +12,9 @@ export const useJoinInCourse = () => {
       await SUPABASE_CLIENT.from("student_courses")
         .insert([{ course_id: courseId, student_id: student?.id }])
         .select();
+      await refetchCourses();
     },
-    [student]
+    [student, refetchCourses]
   );
   return joinInCourse;
 };

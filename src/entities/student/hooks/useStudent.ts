@@ -10,6 +10,7 @@ export const useStudent = () => {
       .select("*")
       .eq("userId", user.id)
       .single();
+
     if (error) {
       throw new Error(error.message);
     }

@@ -8,8 +8,11 @@ import { CoursesData } from "../types";
 export const useCourses = () => {
   const { user } = useSessionContext();
 
-  const { data: studentCourses, isLoading: studentCoursesLoading } =
-    useStudentCourses();
+  const {
+    data: studentCourses,
+    isLoading: studentCoursesLoading,
+    mutate: mutateStudentCourses,
+  } = useStudentCourses();
   const { data: allCourses, isLoading: allCoursesLoading } = useSWR(
     user && `/courses/`,
     async () => {
@@ -50,6 +53,9 @@ export const useCourses = () => {
     allCourses,
     studentCourses,
     isLoading,
+    refetch: async () => {
+      await mutateStudentCourses(null);
+    },
   };
 };
 
