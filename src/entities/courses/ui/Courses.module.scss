@@ -1,0 +1,39 @@
+.list {
+  display: flex;
+  overflow-y: scroll;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  min-width: 300px;
+  max-width: 480px;
+
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin: 0.6rem;
+  background-color: #fff;
+  transition: transform 0.3s ease-in-out;
+  &:hover {
+    transform: scale(1.05);
+  }
+  b {
+    display: block;
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 8px;
+  }
+  p {
+    color: #777;
+    font-size: 0.9em;
+    margin: 0;
+  }
+  h4 {
+    margin: 0;
+    padding: 0;
+    color: green;
+  }
+}

@@ -55,7 +55,7 @@ export const Account = () => {
       username,
       website,
       avatar_url,
-      updated_at: new Date().toString(),
+      updated_at: new Date() as any,
     };
 
     const { error } = await SUPABASE_CLIENT.from("profiles").upsert(updates);
@@ -72,7 +72,7 @@ export const Account = () => {
     <>
       <form
         onSubmit={(event) => {
-          updateProfile(event, "");
+          updateProfile(event, avatar_url || "");
         }}
         className="form-widget"
       >

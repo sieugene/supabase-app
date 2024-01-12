@@ -1,23 +1,10 @@
+import { useStudent } from "entities/student/hooks/useStudent";
 import { SUPABASE_CLIENT } from "shared/api/supabase";
 import { useSessionContext } from "shared/providers";
-import useSWR from "swr";
 
 export const Student = () => {
   const { user } = useSessionContext();
-  const { data, isLoading } = useSWR(
-    user && `/student/${user?.id}`,
-    async () => {
-      if (!user) return null;
-      const { data: students, error } = await SUPABASE_CLIENT.from("students")
-        .select("*")
-        .eq("userId", user.id)
-        .single();
-      if (error) {
-        throw new Error(error.message);
-      }
-      return students;
-    }
-  );
+  const { data, isLoading } = useStudent();
 
   const joinAsStudent = async () => {
     if (!user) return;

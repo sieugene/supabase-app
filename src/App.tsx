@@ -1,6 +1,6 @@
 import { Account } from "entities/account/ui";
-import { Student } from "entities/student/ui";
 import { PrivatePage } from "features/auth/ui";
+import { StudentPage } from "pages/student";
 import { FC, ReactNode } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ROUTES } from "shared/lib/routes";
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
     path: ROUTES.student,
     element: (
       <PageContainer>
-        <Student />
+        <StudentPage />
       </PageContainer>
     ),
   },

@@ -62,7 +62,7 @@ export const Avatar: FC<Props> = ({ url, size, onUpload }) => {
   }
 
   return (
-    <div>
+    <div className="account-avatar">
       {avatarUrl ? (
         <img
           src={avatarUrl}
@@ -76,15 +76,11 @@ export const Avatar: FC<Props> = ({ url, size, onUpload }) => {
           style={{ height: size, width: size }}
         />
       )}
-      <div style={{ width: size }}>
+      <div style={{ width: size }} className="upload">
         <label className="button primary block" htmlFor="single">
-          {uploading ? "Uploading ..." : "Upload"}
+          {uploading ? "Uploading ..." : `${avatarUrl ? "Update" : "Upload"} Avatar`}
         </label>
         <input
-          style={{
-            visibility: "hidden",
-            position: "absolute",
-          }}
           type="file"
           id="single"
           accept="image/*"
