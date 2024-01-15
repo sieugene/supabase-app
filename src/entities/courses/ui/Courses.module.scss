@@ -37,3 +37,10 @@
     color: green;
   }
 }
+
+.cardBottom {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  gap: 10px;
+}

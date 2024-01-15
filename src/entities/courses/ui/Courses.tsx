@@ -1,6 +1,8 @@
 import { Tables } from "database.types";
 import { useStudent } from "entities/student/hooks/useStudent";
-import { FC } from "react";
+import { FC, useMemo } from "react";
+import { NavLink } from "react-router-dom";
+import { ROUTES } from "shared/lib/routes";
 import { useCourses } from "../hooks/useCourses";
 import { useJoinInCourse } from "../hooks/useJoinInCourse";
 import classes from "./Courses.module.scss";
@@ -26,7 +28,7 @@ export const Courses = () => {
         {data?.length &&
           data?.map((course) => (
             <CourseCard
-              showCardBottom
+              showStatus
               joined={course.joined}
               course={course}
               joinInCourse={joinInCourse}
@@ -42,7 +44,7 @@ export const Courses = () => {
             ({ courses }) =>
               courses && (
                 <CourseCard
-                  showCardBottom={false}
+                  showStatus={false}
                   joined={true}
                   course={courses}
                   joinInCourse={joinInCourse}
@@ -64,8 +66,12 @@ const CourseCard: FC<{
   course: Tables<"courses">;
   joined: boolean;
   joinInCourse: (courseId: number) => Promise<void>;
-  showCardBottom: boolean;
-}> = ({ course, joinInCourse, joined, showCardBottom = true }) => {
+  showStatus: boolean;
+}> = ({ course, joinInCourse, joined, showStatus = true }) => {
+  const courseLink = useMemo(
+    () => ROUTES.getCoursePage(course.id),
+    [course.id]
+  );
   return (
     <div className={classes.card}>
       <div className={classes.cardHead}>
@@ -73,15 +79,14 @@ const CourseCard: FC<{
         <p>Date: {new Date(course?.created_at).toUTCString()}</p>
       </div>
 
-      {showCardBottom && (
-        <div className={classes.cardBottom}>
-          {joined ? (
-            <h4>enrolled</h4>
-          ) : (
-            <button onClick={() => joinInCourse(course?.id)}>Join</button>
-          )}
-        </div>
-      )}
+      <div className={classes.cardBottom}>
+        <NavLink to={courseLink}>Course link details</NavLink>
+        {showStatus && joined ? (
+          <h4>enrolled</h4>
+        ) : (
+          <button onClick={() => joinInCourse(course?.id)}>Join</button>
+        )}
+      </div>
     </div>
   );
 };

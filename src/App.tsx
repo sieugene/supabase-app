@@ -1,13 +1,14 @@
 import { Account } from "entities/account/ui";
 import { PrivatePage } from "features/auth/ui";
+import { CoursePage } from "pages/course";
 import { StudentPage } from "pages/student";
 import { FC, ReactNode } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ROUTES } from "shared/lib/routes";
 import { SessionProvider } from "shared/providers";
 import { Header } from "shared/ui";
-import "./App.css";
 import { SWRConfig } from "swr";
+import "./App.css";
 
 const PageContainer: FC<{ children: ReactNode }> = ({ children }) => {
   return (
@@ -34,6 +35,14 @@ const router = createBrowserRouter([
     element: (
       <PageContainer>
         <StudentPage />
+      </PageContainer>
+    ),
+  },
+  {
+    path: ROUTES.course,
+    element: (
+      <PageContainer>
+        <CoursePage />
       </PageContainer>
     ),
   },
