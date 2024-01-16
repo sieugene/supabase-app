@@ -36,6 +36,16 @@
     padding: 0;
     color: green;
   }
+  .codeText {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    b {
+      margin: 0;
+      font-size: 14px;
+    }
+  }
 }
 
 .cardBottom {

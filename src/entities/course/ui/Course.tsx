@@ -5,14 +5,26 @@ import {
   useFindCourseWithStudents,
 } from "../hooks/useFindCourseWithStudents";
 import styles from "./Course.module.scss";
+import { useJoinInCourse } from "entities/courses/hooks/useJoinInCourse";
+import { useFindStudentCourseById } from "entities/courses/hooks/useFindStudentCourseById";
 
 type Props = {
   courseId: Tables<"courses">["id"];
 };
 export const Course: FC<Props> = ({ courseId }) => {
-  const { data } = useFindCourseWithStudents(courseId);
+  const { data, mutate } = useFindCourseWithStudents(courseId);
+  const { data: courseDataByStudent, mutate: mutateCourseDataByStudent } =
+    useFindStudentCourseById(courseId);
+
   const course = useMemo(() => data?.course || null, [data?.course]);
   const students = useMemo(() => data?.students || [], [data?.students]);
+  const isJoined = useMemo(() => !!courseDataByStudent, [courseDataByStudent]);
+
+  const joinInCourse = useJoinInCourse(async () => {
+    await mutate(undefined);
+    await mutateCourseDataByStudent(undefined);
+  });
+
   if (!data?.course) return null;
   return (
     <div className={styles.root}>
@@ -47,9 +59,15 @@ export const Course: FC<Props> = ({ courseId }) => {
             <li>Lorem ipsum dolor sit amet.</li>
             <li>Lorem ipsum dolor sit amet.</li>
           </ul>
-          <div className={styles.detailsFooter}>
-            <button>Join</button>
-          </div>
+          {course?.id && (
+            <div className={styles.detailsFooter}>
+              {isJoined ? (
+                <p>You was joined</p>
+              ) : (
+                <button onClick={() => joinInCourse(course?.id)}>Join</button>
+              )}
+            </div>
+          )}
         </div>
       </div>
       <StudentsTable students={students} />

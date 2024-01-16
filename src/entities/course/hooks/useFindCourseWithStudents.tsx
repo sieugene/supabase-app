@@ -38,8 +38,8 @@ export const useFindCourseWithStudents = (
       students:
         courseStudents?.map((info) => ({
           created_at: info.students?.created_at || "",
-          id: 0,
-          userId: "",
+          id: info?.students?.id || 0,
+          userId: info?.students?.userId || "",
         })) || [],
     };
 

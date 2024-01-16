@@ -1,31 +1,48 @@
-import { useStudent } from "entities/student/hooks/useStudent";
-import { useMemo } from "react";
+import { PostgrestError, PostgrestSingleResponse } from "@supabase/supabase-js";
+import { Tables } from "database.types";
+import { useCallback, useMemo, useState } from "react";
 import { SUPABASE_CLIENT } from "shared/api/supabase";
+import { useDebounce } from "shared/hooks/useDebounce";
 import { useSessionContext } from "shared/providers";
 import useSWR from "swr";
 import { CoursesData } from "../types";
+import { useStudentCourses } from "./useStudentCourses";
 
 export const useCourses = () => {
   const { user } = useSessionContext();
+  const [searchValue, setSearch] = useState("");
+  const debouncedSearch = useDebounce(searchValue, 500);
 
   const {
     data: studentCourses,
     isLoading: studentCoursesLoading,
     mutate: mutateStudentCourses,
   } = useStudentCourses();
+
   const { data: allCourses, isLoading: allCoursesLoading } = useSWR(
-    user && `/courses/`,
+    user && `/courses/search=${debouncedSearch || ""}`,
     async () => {
       if (!user) return null;
+      let error: PostgrestError | null = null;
+      let coursesData: PostgrestSingleResponse<Tables<"courses">[]>["data"] =
+        [];
 
-      const { data: courses, error } = await SUPABASE_CLIENT.from(
-        "courses"
-      ).select("*");
+      if (debouncedSearch?.length) {
+        const searchResult = await SUPABASE_CLIENT.from("courses")
+          .select("*")
+          .textSearch("courses_find_title_code", debouncedSearch);
+        error = searchResult?.error;
+        coursesData = searchResult?.data || [];
+      } else {
+        const getAllResult = await SUPABASE_CLIENT.from("courses").select("*");
+        error = getAllResult?.error;
+        coursesData = getAllResult?.data || [];
+      }
 
       if (error) {
         throw new Error(error.message);
       }
-      return courses;
+      return coursesData;
     }
   );
 
@@ -48,7 +65,13 @@ export const useCourses = () => {
     return data;
   }, [allCourses, studentCourses]);
 
+  const handleSearch = useCallback((value: string) => {
+    setSearch(value);
+  }, []);
+
   return {
+    searchValue,
+    handleSearch,
     coursesData,
     allCourses,
     studentCourses,
@@ -57,23 +80,4 @@ export const useCourses = () => {
       await mutateStudentCourses(null);
     },
   };
-};
-
-const useStudentCourses = () => {
-  const { data: student } = useStudent();
-
-  return useSWR(student && `/courses/${student?.id}`, async () => {
-    if (!student) return null;
-
-    const { data: courseStudents, error } = await SUPABASE_CLIENT.from(
-      "student_courses"
-    )
-      .select(`courses ( * ), students ( * ) `)
-      .eq("student_id", student.id);
-
-    if (error) {
-      throw new Error(error.message);
-    }
-    return courseStudents;
-  });
 };

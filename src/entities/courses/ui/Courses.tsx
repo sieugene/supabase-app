@@ -14,6 +14,8 @@ export const Courses = () => {
     studentCourses,
     isLoading,
     refetch,
+    searchValue,
+    handleSearch,
   } = useCourses();
 
   const joinInCourse = useJoinInCourse(refetch);
@@ -24,17 +26,25 @@ export const Courses = () => {
     <>
       <h2>Courses</h2>
       {isLoading && <h2>Courses Loading...</h2>}
+      <input
+        placeholder="Search course by title or code"
+        value={searchValue}
+        onChange={({ target }) => handleSearch(target.value)}
+      />
       <div className={classes.list}>
-        {data?.length &&
-          data?.map((course) => (
-            <CourseCard
-              showStatus
-              joined={course.joined}
-              course={course}
-              joinInCourse={joinInCourse}
-              key={course.id}
-            />
-          ))}
+        {data?.length
+          ? data?.map((course) => (
+              <CourseCard
+                showStatus
+                joined={course.joined}
+                course={course}
+                joinInCourse={joinInCourse}
+                key={course.id}
+              />
+            ))
+          : !isLoading
+          ? "Try search another"
+          : ""}
       </div>
 
       <h2>Joined courses</h2>
@@ -77,14 +87,21 @@ const CourseCard: FC<{
       <div className={classes.cardHead}>
         <b>{course?.title}</b>
         <p>Date: {new Date(course?.created_at).toUTCString()}</p>
+        <p className={classes.codeText}>
+          Code: <b>{course?.code}</b>
+        </p>
       </div>
 
       <div className={classes.cardBottom}>
         <NavLink to={courseLink}>Course link details</NavLink>
-        {showStatus && joined ? (
-          <h4>enrolled</h4>
+        {showStatus ? (
+          joined ? (
+            <h4>enrolled</h4>
+          ) : (
+            <button onClick={() => joinInCourse(course?.id)}>Join</button>
+          )
         ) : (
-          <button onClick={() => joinInCourse(course?.id)}>Join</button>
+          ""
         )}
       </div>
     </div>
