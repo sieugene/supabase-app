@@ -15,6 +15,7 @@ export interface Database {
           created_at: string
           id: number
           title: string | null
+          courses_find_title_code: string | null
         }
         Insert: {
           code?: string | null
@@ -74,6 +75,7 @@ export interface Database {
           avatar_url: string | null
           full_name: string | null
           id: string
+          role: string | null
           updated_at: string | null
           username: string | null
           website: string | null
@@ -82,6 +84,7 @@ export interface Database {
           avatar_url?: string | null
           full_name?: string | null
           id: string
+          role?: string | null
           updated_at?: string | null
           username?: string | null
           website?: string | null
@@ -90,6 +93,7 @@ export interface Database {
           avatar_url?: string | null
           full_name?: string | null
           id?: string
+          role?: string | null
           updated_at?: string | null
           username?: string | null
           website?: string | null
@@ -165,11 +169,24 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      courses_find_title_code: {
+        Args: {
+          "": unknown
+        }
+        Returns: string
+      }
       delete_avatar: {
         Args: {
           avatar_url: string
         }
         Returns: Record<string, unknown>
+      }
+      delete_claim: {
+        Args: {
+          uid: string
+          claim: string
+        }
+        Returns: string
       }
       delete_storage_object: {
         Args: {
@@ -177,6 +194,41 @@ export interface Database {
           object: string
         }
         Returns: Record<string, unknown>
+      }
+      get_claim: {
+        Args: {
+          uid: string
+          claim: string
+        }
+        Returns: Json
+      }
+      get_claims: {
+        Args: {
+          uid: string
+        }
+        Returns: Json
+      }
+      get_my_claim: {
+        Args: {
+          claim: string
+        }
+        Returns: Json
+      }
+      get_my_claims: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
+      is_claims_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      set_claim: {
+        Args: {
+          uid: string
+          claim: string
+          value: Json
+        }
+        Returns: string
       }
     }
     Enums: {
