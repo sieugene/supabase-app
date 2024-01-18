@@ -5,7 +5,7 @@ import { useSessionContext } from "shared/providers";
 import { GetProfileQuery, getProfileQuery } from "../api";
 
 export const Account = () => {
-  const { user } = useSessionContext();
+  const { user, userRole } = useSessionContext();
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState<GetProfileQuery["username"]>("");
   const [website, setWebsite] = useState<GetProfileQuery["website"]>("");
@@ -83,6 +83,9 @@ export const Account = () => {
             updateProfile(event, url);
           }}
         />
+        <div>
+          <h2>Role - {userRole || "?"}</h2>
+        </div>
         <div className="field">
           <label htmlFor="email">Email</label>
           <input id="email" type="text" value={user?.email} disabled />
