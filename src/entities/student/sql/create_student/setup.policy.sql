@@ -1,4 +1,4 @@
-CREATE POLICY "Create User" ON "public"."students" AS PERMISSIVE FOR
+CREATE POLICY "Create Student" ON "public"."students" AS PERMISSIVE FOR
 INSERT
 	TO authenticated WITH CHECK (
 		(auth.uid() = students."userId")

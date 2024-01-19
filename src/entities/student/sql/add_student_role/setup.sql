@@ -20,6 +20,6 @@ END;
 $$;
 
 CREATE TRIGGER students_claim_insert_trigger
-AFTER INSERT ON students
+BEFORE INSERT ON students
 FOR EACH ROW EXECUTE PROCEDURE add_student_role();
 
