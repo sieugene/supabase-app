@@ -17,6 +17,7 @@ export const getProfileQuery = async (
   const responseShouldSuccess = await SUPABASE_CLIENT.rpc("get_my_claim", {
     claim: "userrole",
   });
+  console.log(responseShouldFailed, responseShouldSuccess);
 
   return result;
 };
