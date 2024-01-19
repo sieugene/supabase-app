@@ -10,15 +10,6 @@ export const getProfileQuery = async (
     .eq("id", user.id)
     .single();
 
-  const responseShouldFailed = await SUPABASE_CLIENT.rpc("get_claim", {
-    claim: "userrole",
-    uid: user.id,
-  });
-  const responseShouldSuccess = await SUPABASE_CLIENT.rpc("get_my_claim", {
-    claim: "userrole",
-  });
-  console.log(responseShouldFailed, responseShouldSuccess);
-
   return result;
 };
 

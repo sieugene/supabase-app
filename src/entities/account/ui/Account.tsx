@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import { SUPABASE_CLIENT } from "shared/api/supabase";
 import { useSessionContext } from "shared/providers";
 import { GetProfileQuery, getProfileQuery } from "../api";
+import { useUserRole } from "../hooks/useUserRole";
 
 export const Account = () => {
-  const { user, userRole } = useSessionContext();
+  const { user } = useSessionContext();
+  const { data: userRole } = useUserRole();
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState<GetProfileQuery["username"]>("");
   const [website, setWebsite] = useState<GetProfileQuery["website"]>("");

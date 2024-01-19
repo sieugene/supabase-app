@@ -13,12 +13,10 @@ import useSWR from "swr";
 type SessionContextT = {
   session: Session | null;
   user: Session["user"] | null;
-  userRole: string;
 };
 export const Context = createContext<SessionContextT>({
   session: null,
   user: null,
-  userRole: "",
 });
 
 export const SessionProvider: FC<{ children: ReactNode }> = ({ children }) => {
@@ -35,16 +33,10 @@ export const SessionProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   const user = useMemo(() => session?.user || null, [session]);
-  const userRole = useMemo(
-    () => (user?.app_metadata as unknown as { userrole: string })?.userrole,
-    [user?.app_metadata]
-  );
 
   useSWR(`user/role/${user?.id}`, () => {});
 
   return (
-    <Context.Provider value={{ session, user, userRole }}>
-      {children}
-    </Context.Provider>
+    <Context.Provider value={{ session, user }}>{children}</Context.Provider>
   );
 };

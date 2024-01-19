@@ -1,4 +1,4 @@
-CREATE FUNCTION add_student_role()
+CREATE OR REPLACE FUNCTION add_student_role()
 RETURNS TRIGGER
 LANGUAGE PLPGSQL
 security definer
@@ -12,8 +12,7 @@ BEGIN
     PERFORM set_claim(user_id, 'userrole', jsonb_build_array(assign_role));
     RAISE NOTICE 'Set claim (null): %', jsonb_build_array(assign_role);
   ELSE
-    PERFORM set_claim(user_id, 'userrole', current_claim || jsonb_build_array(assign_role));
-    RAISE NOTICE 'Set claim (add userrole): %', current_claim || jsonb_build_array(assign_role);
+    RAISE EXCEPTION 'You has role %', current_claim;
   END IF;
   RETURN NEW;
 END;
